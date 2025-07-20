@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To do list</title>
+    <style>
+        body {
+            margin:0;
+             padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #915dd1, #60f1f9);
+      color: #2c3e50;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: auto;
+      background-color: rgba(243, 229, 181, 0.9);
+      padding: 30px;
+      margin-top: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(10,10,10,10.2);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .date-weather {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .planner-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .planner-grid div {
+      border-bottom: 1px solid #ccc;
+      padding: 8px 0;
+    }
+
+    .right-section {
+      display: grid;
+      grid-template-rows: auto auto auto;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #ecbc97;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      padding: 8px;
+      resize: none;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .goals input {
+      width: 100%;
+      margin-top: 5px;
+      padding: 5px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+    }
+
+    label {
+      font-weight: bold;
+    }
+  .todo-container {
+    background-color: #f8e6e0; /* warna pastel mirip pomodoro */
+    padding: 15px;
+    border-radius: 12px;
+    width: 300px;
+    margin: 20px auto;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    padding: 8px 12px;
+    background-color: #ff7f7f;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin: 6px 0;
+  }
+    </style>
+</head>
+<body>
+    
+  <div class="container">
+    <h1>Daily Planner🌿:✧˚.📷⋆𖧧</h1>
+
+    <div class="date-weather">
+      <div>
+        <label for="date">Date:</label>
+        <input type="date" id="date">
+      </div>
+      <div>☀ 🌧 ❄ 🌩 </div>
+    </div>
+
+    <div class="planner-grid">
+      <div>
+        <div><strong>Time</strong></div>
+        {% for hour in range(4, 23) %}
+          <div>{{ "%02d:00 %s"|format(hour if hour <= 12 else hour-12, "AM" if hour < 12 else "PM") }}</div>
+        {% endfor %}
+      </div>
+      <div>
+        <div><strong>Activity</strong></div>
+        {% for hour in range(4, 23) %}
+          <div><input type="text" style="width: 95%; padding: 5px;"></div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="right-section">
+      <div class="card goals">
+        <label>Today's Goals:</label>
+        <input type="text">
+        <input type="text">
+        <input type="text">
+      </div>
+
+      <div class="card">
+        <label>To-Do Lists:</label>
+        <h3>📝 To-Do Lists:</h3>
+        <input type="text" id="todo-input" placeholder="Tulis tugas...">
+        <button onclick="addTodo()">➕ Tambah</button>
+        <ul id="todo-list"></ul>
+      </div>
+
+      <div class="card">
+        <label>Notes:</label>
+        <textarea placeholder="Write your notes..."></textarea>
+        <div class="todo-container">
+</div>
+
+<script>
+  function addTodo() {
+    const input = document.getElementById("todo-input");
+    const task = input.value.trim();
+    if (task === "") return;
+
+    const li = document.createElement("li");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+
+    const label = document.createElement("label");
+    label.textContent = " " + task;
+
+    li.appendChild(checkbox);
+    li.appendChild(label);
+
+    document.getElementById("todo-list").appendChild(li);
+    input.value = "";
+  }
+</script>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

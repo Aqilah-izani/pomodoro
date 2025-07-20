@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalender Deadline Aqilah</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 20px;
+      background: linear-gradient(to right, #915dd1, #60f1f9);
+    }
+    .judul {
+      font-size: 40px;
+      font-weight: bold;
+      color: #86d98d;
+      text-shadow: 5px 5px 9px rgba(59, 60, 59, 2.3);
+      top: 100px;
+      left:100px;
+    }
+    .deadline-container {
+      max-width: 500px;
+      margin: auto;
+      background: rgb(241, 227, 175);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      font-size: 16px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #9df7a5;
+      margin: 5px 0;
+      padding: px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .delete-btn {
+      background: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+      <h1 class="judul">Kalender Deadline𓇼🧉❀🐚𓆉︎ ࿔*:･ﾟ☾</h1>
+  </div>
+  <div class="deadline-container">
+    <h2>📅 Kalender Deadline</h2>
+    <label for="date">Tanggal Deadline:</label>
+    <input type="date" id="date">
+
+    <label for="task">Nama Tugas:</label>
+    <input type="text" id="task" placeholder="Contoh: Tugas Fisika">
+
+    <button onclick="addDeadline()">➕ Tambah Deadline</button>
+
+    <ul id="deadlineList"></ul>
+  </div>
+
+  <script>
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedDeadlines = JSON.parse(localStorage.getItem("deadlines")) || [];
+      savedDeadlines.forEach(deadline => addDeadlineToList(deadline.date, deadline.task));
+    });
+
+    function addDeadline() {
+      const date = document.getElementById("date").value;
+      const task = document.getElementById("task").value;
+
+      if (!date || !task) {
+        alert("Isi semua dulu ya, beb😊");
+        return;
+      }
+
+      addDeadlineToList(date, task);
+      saveToLocalStorage(date, task);
+
+      document.getElementById("date").value = '';
+      document.getElementById("task").value = '';
+    }
+
+    function addDeadlineToList(date, task) {
+      const ul = document.getElementById("deadlineList");
+      const li = document.createElement("li");
+      li.innerHTML = `🗓️ ${date} – ${task} <button class="delete-btn" onclick="deleteDeadline(this, '${date}', '${task}')">Hapus</button>`;
+      ul.appendChild(li);
+    }
+
+    function saveToLocalStorage(date, task) {
+      const current = JSON.parse(localStorage.getItem("deadlines")) || [];
+      current.push({ date, task });
+      localStorage.setItem("deadlines", JSON.stringify(current));
+    }
+
+    function deleteDeadline(button, date, task) {
+      button.parentElement.remove();
+
+      const current = JSON.parse(localStorage.getItem("deadlines")) || [];
+      const updated = current.filter(item => item.date !== date || item.task !== task);
+      localStorage.setItem("deadlines", JSON.stringify(updated));
+    }
+  </script>
+</body>
+</html>

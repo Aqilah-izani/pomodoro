@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Podomoro Timer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="gradient-bg">
+    <div class="container">
+    <div class="header">
+      <h1 class="judul">Pomodoro Timer🦦ྀི</h1>
+    </div>
+    <div class="pomodoro-box">
+    <p class="pomodoro-title">SESSION</p>
+    <div class="timer-display" id="timer">25:00</div>
+
+    <div class="timer-controls">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="resetTimer()">Reset</button>
+    </div>
+
+    <div class="adjustments">
+        <div class="adjust">
+            <p>Break Length</p>
+            <button onclick="changeBreak(-1)">-</button>
+            <span id="break-length">5</span>
+            <button onclick="changeBreak(1)">+</button>
+        </div>
+        <div class="adjust">
+            <p>Session Length</p>
+            <button onclick="changeSession(-1)">-</button>
+            <span id="session-length">25</span>
+            <button onclick="changeSession(1)">+</button>
+        </div>
+        <div id="controls">
+            <audio id="alarm-sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+
+    </div>
+</div>
+<script>
+let timer;
+let timeLeft = 1500; // 25 minutes in seconds
+let isRunning = false;
+
+function updateDisplay() {
+    const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+    const seconds = String(timeLeft % 60).padStart(2, '0');
+    document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+}
+
+function startTimer() {
+    if (isRunning) return;
+    isRunning = true;
+    timer = setInterval(() => {
+        if (timeLeft > 0) {
+            timeLeft--;
+            updateDisplay();
+        } else {
+            clearInterval(timer);
+            isRunning = false;
+        }
+    }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(timer);
+    isRunning = false;
+    const sessionLength = parseInt(document.getElementById("session-length").textContent);
+    timeLeft = sessionLength * 60;
+    updateDisplay();
+}
+
+function changeBreak(amount) {
+    const el = document.getElementById("break-length");
+    let value = parseInt(el.textContent) + amount;
+    if (value < 1) value = 1;
+    el.textContent = value;
+}
+
+function changeSession(amount) {
+    const el = document.getElementById("session-length");
+    let value = parseInt(el.textContent) + amount;
+    if (value < 1) value = 1;
+    el.textContent = value;
+    resetTimer();
+}
+
+updateDisplay();
+function saveTime() {
+    localStorage.setItem('savedTime', timeLeft);
+    alert('Waktu disimpan!');
+}
+
+function clearTime() {
+    localStorage.removeItem('savedTime');
+    resetTimer();
+    alert('Waktu dihapus!');
+}
+
+// Cek kalau ada waktu tersimpan pas buka
+window.onload = () => {
+    const saved = localStorage.getItem('savedTime');
+    if (saved) {
+        timeLeft = parseInt(saved);
+        updateDisplay();
+    }
+};
+
+// Tambahin bunyi pas waktu habis
+function playAlarm() {
+    const audio = document.getElementById("alarm-sound");
+    audio.play();
+}
+
+// Modifikasi bagian ketika waktu habis
+function startTimer() {
+    if (isRunning) return;
+    isRunning = true;
+    timer = setInterval(() => {
+        if (timeLeft > 0) {
+            timeLeft--;
+            updateDisplay();
+        } else {
+            clearInterval(timer);
+            isRunning = false;
+            playAlarm(); // 🔔 Mainkan bunyi
+        }
+    }, 1000);
+}
+
+</script>
+
+</body>
+</html>
